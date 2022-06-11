@@ -290,16 +290,20 @@ void sendSensor()
 	// Read temperature as Celsius (the default)
 	float t = dht.readTemperature();
 
+	int ac_status = 0;
+
 	if (isnan(h) || isnan(t))
 	{
 		Serial.println(F("Failed to read from DHT sensor!"));
 		return;
 	}
-	// JSON_Data = {"temp":t,"hum":h}
+	// JSON_Data = {"temp":t,"hum":h, "ac": ac_status}
 	String JSON_Data = "{\"temp\":";
 	JSON_Data += t;
 	JSON_Data += ",\"hum\":";
 	JSON_Data += h;
+	JSON_Data += ",\"ac\":";
+	JSON_Data += ac_status;
 	JSON_Data += "}";
 	Serial.println(JSON_Data);
 	websockets.broadcastTXT(JSON_Data);
