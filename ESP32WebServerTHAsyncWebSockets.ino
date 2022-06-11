@@ -246,8 +246,11 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t length)
 const char *ssid = "JIOFIBER-MANE LOW";
 const char *password = "RNDM@20RADIOWAVE20";
 
+#define ACPin 12
+
 void setup()
 {
+	pinMode(ACPin, OUTPUT);
 	Serial.begin(115200);
 	dht.begin();
 
@@ -307,4 +310,16 @@ void sendSensor()
 	JSON_Data += "}";
 	Serial.println(JSON_Data);
 	websockets.broadcastTXT(JSON_Data);
+}
+
+void controlAC(int status, int temp)
+{
+	if (status == 0 && temp >= 32)
+	{
+		digitalWrite(ACPin, HIGH);
+	}
+	else if (status == 1 && temp <= 32)
+	{
+		digitWrite(ACPin, LOW);
+	}
 }
